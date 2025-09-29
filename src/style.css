@@ -1,0 +1,33 @@
+/* Сбрасываем все отступы и границы */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Убираем списочные маркеры */
+ul, ol {
+  list-style: none;
+}
+
+/* Убираем подчёркивания у ссылок */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Убираем стандартный фон и шрифты */
+body {
+  background: none;
+  font-family: inherit;
+  line-height: 1;
+}
+
+/* Сбрасываем стили кнопок и инпутов */
+button, input, textarea, select {
+  font: inherit;
+  background: none;
+  border: none;
+  outline: none;
+  color: inherit;
+}
