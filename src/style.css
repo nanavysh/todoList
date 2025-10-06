@@ -24,10 +24,18 @@ body {
 }
 
 /* Сбрасываем стили кнопок и инпутов */
-button, input, textarea, select {
-  font: inherit;
-  background: none;
-  border: none;
-  outline: none;
-  color: inherit;
+/*button, input, textarea, select {*/
+/*  font: inherit;*/
+/*  background: none;*/
+/*  border: none;*/
+/*  outline: none;*/
+/*  color: inherit;*/
+/*}*/
+
+button {
+  background: #39a8d7d1;
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-family: sans-serif;
+
 }
