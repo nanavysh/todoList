@@ -26,7 +26,8 @@ function createCheckbox(value: TodoItem, index: number) {
 
     checkbox.addEventListener('change', function () {
         list[index].completed = checkbox.checked
-        //todo а если не будет этого элемента по индексу = нужна проверка !
+        if (!list[index]) return
+
         renderList()
     })
 
@@ -54,7 +55,52 @@ function createDeleteButton(index: number) {
     return deleteButton
 }
 
+function createEditButton(index: number) {
+    const editButton = document.createElement('button')
+    editButton.textContent = 'Редактировать'
+
+    editButton.addEventListener('click', function () {
+        const divTodoItemElement = editButton.parentElement
+        if (!divTodoItemElement) return
+
+        const oldTextSpan = divTodoItemElement.querySelector('span')
+        if (!oldTextSpan) return
+
+        const newInputEdit = document.createElement('input')
+        newInputEdit.type = 'text'
+        newInputEdit.value = list[index].text
+
+        divTodoItemElement.replaceChild(newInputEdit, oldTextSpan)
+        newInputEdit.focus()
+        newInputEdit.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                list[index].text = newInputEdit.value
+                renderList()
+            }
+        })
+        newInputEdit.addEventListener('blur', function () {
+            list[index].text = newInputEdit.value
+            renderList()
+        })
+    })
+    return editButton
+}
+
+function sortTodoList(a: TodoItem, b: TodoItem) {
+    if (!a.completed && b.completed) {
+        return -1
+    }
+
+    if (a.completed && !b.completed) {
+        return 1
+    }
+
+    return 0
+}
+
 function renderList() {
+    list.sort(sortTodoList)
+
     todoListHTML.innerHTML = ''
 
     list.forEach(
@@ -63,18 +109,19 @@ function renderList() {
             const divTodoItem = document.createElement('div')
             const textSpan = createTextElement(value)
             const deleteButton = createDeleteButton(index)
+            const resultEditButton = createEditButton(index)
             divTodoItem.className = 'todo_item'
-
 
             divTodoItem.appendChild(checkbox)
             divTodoItem.appendChild(textSpan)
             divTodoItem.appendChild(deleteButton)
+            divTodoItem.appendChild(resultEditButton)
 
             todoListHTML.appendChild(divTodoItem)
         }
     )
 }
 
-// const li = document.createElement('li')
 
-// todo сортировка через фильтр массивов - ис комплитет. 2 варик посмотри sort()
+
+
