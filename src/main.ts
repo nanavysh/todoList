@@ -61,29 +61,52 @@ function createEditButton(index: number) {
 
     editButton.addEventListener('click', function () {
         const divTodoItemElement = editButton.parentElement
-        if (!divTodoItemElement) return
+        if (!divTodoItemElement) {
+            return
+        }
 
-        const oldTextSpan = divTodoItemElement.querySelector('span')
-        if (!oldTextSpan) return
+        const oldTextSpan = divTodoItemElement.querySelector('label span')
+        if (!oldTextSpan) {
+            return
+        }
+
+        const parentLabel = oldTextSpan.parentElement
+        if (!parentLabel) {
+            return
+        }
 
         const newInputEdit = document.createElement('input')
         newInputEdit.type = 'text'
         newInputEdit.value = list[index].text
 
-        divTodoItemElement.replaceChild(newInputEdit, oldTextSpan)
+        parentLabel.replaceChild(newInputEdit, oldTextSpan)
         newInputEdit.focus()
+
         newInputEdit.addEventListener('keydown', function (event) {
             if (event.key === 'Enter') {
                 list[index].text = newInputEdit.value
                 renderList()
             }
         })
+
         newInputEdit.addEventListener('blur', function () {
             list[index].text = newInputEdit.value
             renderList()
         })
     })
     return editButton
+}
+
+function createTodoContent(value: TodoItem, index: number) {
+    const label = document.createElement('label')
+
+    const checkbox = createCheckbox(value, index)
+    const textSpan = createTextElement(value)
+
+    label.appendChild(checkbox)
+    label.appendChild(textSpan)
+
+    return label
 }
 
 function sortTodoList(a: TodoItem, b: TodoItem) {
@@ -105,17 +128,17 @@ function renderList() {
 
     list.forEach(
         function (value, index) {
-            const checkbox = createCheckbox(value, index)
             const divTodoItem = document.createElement('div')
-            const textSpan = createTextElement(value)
             const deleteButton = createDeleteButton(index)
             const resultEditButton = createEditButton(index)
+            const todoContent = createTodoContent(value, index)
             divTodoItem.className = 'todo_item'
 
-            divTodoItem.appendChild(checkbox)
-            divTodoItem.appendChild(textSpan)
+
+            divTodoItem.appendChild(todoContent)
             divTodoItem.appendChild(deleteButton)
             divTodoItem.appendChild(resultEditButton)
+
 
             todoListHTML.appendChild(divTodoItem)
         }
