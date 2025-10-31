@@ -3,32 +3,47 @@ const input = document.getElementById('todo-input') as HTMLInputElement
 const todoListHTML = document.getElementById('todo-list') as HTMLElement
 
 type TodoItem = {
+    id: number
     text: string;
     completed: boolean
 }
 
-const list: TodoItem[] = []
+const todoList: TodoItem[] = []
 
 form.addEventListener('submit', handleSubmit)
 
 function handleSubmit(event: Event) {
     event.preventDefault()
-    const value: string = input.value
-    list.push({ text: value, completed: false })
+
+    const  rawValue: string = input.value
+    const value = rawValue.trim()
+    if (value === '') {
+        input.value = ''
+        return
+    }
+
+    todoList.push({
+        id: Date.now(),
+        text: value,
+        completed: false
+    })
+
     input.value = ''
     renderList()
 }
 
-function createCheckbox(value: TodoItem, index: number) {
+function createCheckbox(id: number, value: TodoItem) {
     const checkbox = document.createElement('input')
     checkbox.type = 'checkbox'
     checkbox.checked = value.completed
 
     checkbox.addEventListener('change', function () {
-        list[index].completed = checkbox.checked
-        if (!list[index]) return
+        const todoItem = todoList.find(item => item.id === id)
 
-        renderList()
+        if (todoItem) {
+            todoItem.completed = checkbox.checked
+            renderList()
+        }
     })
 
     return checkbox
@@ -45,17 +60,22 @@ function createTextElement(value: TodoItem) {
     return textSpan
 }
 
-function createDeleteButton(index: number) {
+function createDeleteButton(id: number) {
     const deleteButton = document.createElement('button')
     deleteButton.textContent = 'Удалить'
+
     deleteButton.addEventListener('click', function () {
-        list.splice(index, 1)
-        renderList()
+        const indexToDelete = todoList.findIndex(item => item.id === id)
+
+        if(indexToDelete > -1) {
+            todoList.splice(indexToDelete, 1)
+            renderList()
+        }
     })
     return deleteButton
 }
 
-function createEditButton(index: number) {
+function createEditButton(id: number) {
     const editButton = document.createElement('button')
     editButton.textContent = 'Редактировать'
 
@@ -75,32 +95,37 @@ function createEditButton(index: number) {
             return
         }
 
+        const todoItem = todoList.find(item => item.id === id)
+        if (!todoItem) {
+            return
+        }
+
         const newInputEdit = document.createElement('input')
         newInputEdit.type = 'text'
-        newInputEdit.value = list[index].text
+        newInputEdit.value = todoItem.text
 
         parentLabel.replaceChild(newInputEdit, oldTextSpan)
         newInputEdit.focus()
 
         newInputEdit.addEventListener('keydown', function (event) {
             if (event.key === 'Enter') {
-                list[index].text = newInputEdit.value
+                todoItem.text = newInputEdit.value
                 renderList()
             }
         })
 
         newInputEdit.addEventListener('blur', function () {
-            list[index].text = newInputEdit.value
+            todoItem.text = newInputEdit.value
             renderList()
         })
     })
     return editButton
 }
 
-function createTodoContent(value: TodoItem, index: number) {
+function createTodoContent(id: number, value: TodoItem) {
     const label = document.createElement('label')
 
-    const checkbox = createCheckbox(value, index)
+    const checkbox = createCheckbox(id, value)
     const textSpan = createTextElement(value)
 
     label.appendChild(checkbox)
@@ -122,28 +147,75 @@ function sortTodoList(a: TodoItem, b: TodoItem) {
 }
 
 function renderList() {
-    list.sort(sortTodoList)
+    todoList.sort(sortTodoList)
 
     todoListHTML.innerHTML = ''
 
-    list.forEach(
-        function (value, index) {
-            const divTodoItem = document.createElement('div')
-            const deleteButton = createDeleteButton(index)
-            const resultEditButton = createEditButton(index)
-            const todoContent = createTodoContent(value, index)
-            divTodoItem.className = 'todo_item'
+    todoList.forEach(
+        function (value) {
+            const id =  value.id
 
+            const divTodoItem = document.createElement('div')
+
+            const deleteButton = createDeleteButton(id)
+            const resultEditButton = createEditButton(id)
+
+            const todoContent = createTodoContent(id, value)
+
+            divTodoItem.className = 'todo_item'
 
             divTodoItem.appendChild(todoContent)
             divTodoItem.appendChild(deleteButton)
             divTodoItem.appendChild(resultEditButton)
 
-
             todoListHTML.appendChild(divTodoItem)
         }
     )
+    saveTodoList()
 }
+
+function saveTodoList() {
+    localStorage.setItem('todoList', JSON.stringify(todoList))
+}
+
+function loadTodoList() {
+    const savedTodoList = localStorage.getItem('todoList')
+    if (savedTodoList) {
+        const parsedList: TodoItem[] = JSON.parse(savedTodoList)
+        todoList.length = 0
+        todoList.push(...parsedList)
+    }
+}
+
+loadTodoList()
+renderList()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
