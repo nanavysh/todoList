@@ -15,7 +15,7 @@ form.addEventListener('submit', handleSubmit)
 function handleSubmit(event: Event) {
     event.preventDefault()
 
-    const  rawValue: string = input.value
+    const rawValue: string = input.value
     const value = rawValue.trim()
     if (value === '') {
         input.value = ''
@@ -67,7 +67,7 @@ function createDeleteButton(id: number) {
     deleteButton.addEventListener('click', function () {
         const indexToDelete = todoList.findIndex(item => item.id === id)
 
-        if(indexToDelete > -1) {
+        if (indexToDelete > -1) {
             todoList.splice(indexToDelete, 1)
             renderList()
         }
@@ -153,7 +153,7 @@ function renderList() {
 
     todoList.forEach(
         function (value) {
-            const id =  value.id
+            const id = value.id
 
             const divTodoItem = document.createElement('div')
 

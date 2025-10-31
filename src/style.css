@@ -1,33 +1,70 @@
-/* Сбрасываем все отступы и границы */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Убираем списочные маркеры */
 ul, ol {
   list-style: none;
 }
 
-/* Убираем подчёркивания у ссылок */
 a {
   text-decoration: none;
   color: inherit;
 }
 
-/* Убираем стандартный фон и шрифты */
 body {
+  background-color: #f7f9fc;
 
-  background: none;
-  font-family: inherit;
-  line-height: 1;
+  font-family: Tahoma;
+  color: #333;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 50px;
+  line-height: 1.5;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: -1px 0px 60px 0px rgba(0, 0, 0, 0.8);
+  max-width: 550px;
+  width: 100%;
+}
+
+h1 {
+  text-align: center;
+  color: #2c3e50;
+  font-size: 2em;
+  font-weight: 600;
+}
+
+#todo-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+#todo-input {
+  flex-grow: 1;
+  padding: 12px 15px;
+  font-size: 1em;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  transition: border-color 0.3s;
 }
 
 .todo_item {
   background: aliceblue;
   width: 200px;
   padding: 10px;
+}
+
 
 /* Сбрасываем стили кнопок и инпутов */
 /*button, input, textarea, select {*/
