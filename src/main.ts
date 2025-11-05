@@ -165,8 +165,8 @@ function renderList() {
             divTodoItem.className = 'todo_item'
 
             divTodoItem.appendChild(todoContent)
-            divTodoItem.appendChild(deleteButton)
             divTodoItem.appendChild(resultEditButton)
+            divTodoItem.appendChild(deleteButton)
 
             todoListHTML.appendChild(divTodoItem)
         }
